@@ -304,6 +304,7 @@ if [[ $(cat /etc/selinux/config | grep "SELINUX=disabled") || $(cat /etc/selinux
                     cp config/selinux/config /etc/selinux/config
                     setenforce 0
                     echo ""
+                    #NEW EDITED
                     echo -e "$Red---------------------------------------------------$Color_0ff"
 	               echo -e "$Cyan Sukses!! $(cat /etc/selinux/config | grep "SELINUX=disabled") $Color_0ff"
                     echo -e "$Red---------------------------------------------------$Color_0ff"
