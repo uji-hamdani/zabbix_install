@@ -277,7 +277,6 @@ if [[ $(cat /etc/selinux/config | grep "SELINUX=disabled") || $(cat /etc/selinux
                     echo -e "$Red---------------------------------------------------$Color_0ff"
 	               echo -e "$Cyan SELINUX status : Disable $Color_0ff"
                     echo ""
-                    echo ""
                     echo -e "$Red---------------------------------------------------$Color_0ff"
 			     read -p "$(echo -e $Yellow" Tekan tombol apapun lalu [enter] : "$Color_0ff)" xzxz
 			     xzxz=1
@@ -285,8 +284,7 @@ if [[ $(cat /etc/selinux/config | grep "SELINUX=disabled") || $(cat /etc/selinux
 			 	then
                          echo -e "$Red---------------------------------------------------$Color_0ff"
     	                    echo -e "$Cyan SELINUX status : Aktif $Color_0ff"
-                         echo ""
-                         echo ""
+                Z        echo ""
                          echo -e "$Red---------------------------------------------------$Color_0ff"
                          read -p "$(echo -e $Yellow"Disable SELINUX ? Tekan tombol apapun lalu [enter] "$Color_0ff)" xzxz
 				     xzxz=2
@@ -306,8 +304,9 @@ if [[ $(cat /etc/selinux/config | grep "SELINUX=disabled") || $(cat /etc/selinux
                     cp config/selinux/config /etc/selinux/config
                     setenforce 0
                     echo ""
-                    echo ""
+                    echo -e "$Red---------------------------------------------------$Color_0ff"
 	               echo -e "$Cyan Sukses!! $(cat /etc/selinux/config | grep "SELINUX=disabled") $Color_0ff"
+                    echo -e "$Red---------------------------------------------------$Color_0ff"
                     read -p "$(echo -e $Yellow"Next >> Tekan tombol apapun lalu [enter] "$Color_0ff)" xzxzz
              fi
 
