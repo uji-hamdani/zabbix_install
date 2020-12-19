@@ -285,7 +285,7 @@ if [[ $(cat /etc/selinux/config | grep "SELINUX=disabled") || $(cat /etc/selinux
 			 	then
                          echo -e "$Red---------------------------------------------------$Color_0ff"
     	                    echo -e "$Cyan SELINUX status : Aktif $Color_0ff"
-                Z        echo ""
+                         echo ""
                          echo -e "$Red---------------------------------------------------$Color_0ff"
                          read -p "$(echo -e $Yellow"Disable SELINUX ? Tekan tombol apapun lalu [enter] "$Color_0ff)" xzxz
 				     xzxz=2
