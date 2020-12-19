@@ -26,7 +26,7 @@ Cyan='\033[0;36m'         # Cyan
 function Keluar ()
 {
      echo -e "$Red---------------------------------------------------$Color_0ff"
-     echo -e "$Yellow Terimakasih... Byeeeee                         $Color_0ff"
+     echo -e "$Yellow Terimakasih...                                 $Color_0ff"
      echo -e "$Red---------------------------------------------------$Color_0ff"
      exit
 }
@@ -51,6 +51,7 @@ sleep 1
 echo -ne '########################################  (100% completed)\r'
 echo -ne '\n'
 echo ""
+read -p "$(echo -e $Yellow"NEXT [ENTER] >>> : "$Color_0ff)" hahahaha
 echo ""
 echo ""
 
@@ -584,8 +585,6 @@ case $case_php in
      clear
      echo -e "$Yellow Install Repo PHP                               $Color_0ff"
      echo -e "$Red---------------------------------------------------$Color_0ff"  
-     echo ""
-     echo ""
      yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
      yum-config-manager --enable remi-php74
      yum install -y php php-cli php-fpm php-pecl-mysql php-mysqlnd php-zip php-devel php-gd php-mcrypt php-mbstring php-curl php-xml php-pear php-bcmath php-json
@@ -594,25 +593,33 @@ case $case_php in
      systemctl restart httpd
      systemctl restart mariadb
      echo ""
-     echo ""
-     versi=$(php -v)
-     versiarr=($versi)
-     hasil1=${versiarr[0]}
-     hasil2=${versiarr[1]}
-     echo ""
-     echo ""
-     echo -e "$Red---------------------------------------------------$Color_0ff"
-     echo -e "$Cyan Versi PHP : $hasil1 $hasil2                      $Color_0ff"
-     echo -e "$Red---------------------------------------------------$Color_0ff"
-     echo ""
-     echo ""
-     echo -e "$Cyan Sukses Install PHP !!! $Color_0ff"
-     echo -e "$Red---------------------------------------------------$Color_0ff"
-     echo ""
-     echo -e "$Yellow Next .. Install Zabbix !!               $Color_0ff"
-     read -p "$(echo -e $Yellow"Tekan tombol apa saja [ENTER] : "$Color_0ff)" xxxx
-     
-     install_zabbix
+     if [[ $(php) -v ]]
+          then      
+               versi=$(php -v)
+               versiarr=($versi)
+               hasil1=${versiarr[0]}
+               hasil2=${versiarr[1]} 
+               echo ""
+               echo ""
+               echo -e "$Red---------------------------------------------------$Color_0ff"
+               echo -e "$Cyan Versi PHP : $hasil1 $hasil2                      $Color_0ff"
+               echo -e "$Red---------------------------------------------------$Color_0ff"
+               echo ""
+               echo ""
+               echo -e "$Cyan Sukses Install PHP !!! $Color_0ff"
+               echo -e "$Red---------------------------------------------------$Color_0ff"
+               echo ""
+               echo -e "$Yellow Next .. Install Zabbix !!               $Color_0ff"
+               read -p "$(echo -e $Yellow"Tekan tombol apa saja [ENTER] : "$Color_0ff)" xxxx   
+               install_zabbix
+          else
+               echo -e "$Cyan Gagal Install PHP !!! $Color_0ff"
+               echo -e "$Red---------------------------------------------------$Color_0ff"
+               echo ""
+               echo -e "$Yellow Kembali .. Install PHP !!               $Color_0ff"
+               read -p "$(echo -e $Yellow"Tekan tombol apa saja [ENTER] : "$Color_0ff)" xxxx   
+               install_php
+     fi
 ;;
 
 9)
@@ -652,6 +659,10 @@ case $case_zabbix  in
                yum update -y
                yum install zabbix-server-mysql zabbix-web-mysql zabbix-agent zabbix-get zabbix-sender zabbix-java-gateway -y
                echo ""
+               # Copy Template
+               mkdir /var/www/html/template-zabbix/
+               cp config/zabbix/template/* /var/www/html/template-zabbix/
+
                echo -e "$Yellow Membuat User,Password,Database Mysql untuk Aplikasi Zabbix$Color_0ff"
                echo -e "$Red-----------------------------------------------------------------$Color_0ff"
                dbhost=localhost
@@ -706,7 +717,7 @@ case $case_zabbix  in
                echo -e "$Cyan sukses menambahkan DBPassword=$enkrip_base ke config/zabbix/zabbix_server.conf $Color_0ff"
                echo -e "$Red-----------------------------------------------------------------$Color_0ff"
                echo ""
-               echo "Masukan Password ini [Copy] : $enkrip_base"             
+               echo -e "$Cyan Masukan Password ini [Copy] : $enkrip_base $Color_0ff"             
                zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -u $dbuser -p $dbname
 
                ## Merubah Charset dan Coll database zabbix ke utf8 dan utf8_bin
@@ -813,18 +824,26 @@ function check_service ()
           read -p "$(echo -e $Yellow" Check Kembali ke langkah Install Zabbix [Enter]: "$Color_0ff)" sasasasa
           install_zabbix
      fi
+     echo ""
      echo -e "$Red ------------------------- $Color_0ff"
      echo -e "$Yellow Database Config : $Color_0ff"
      echo -e "$Red ------------------------- $Color_0ff"
      cat config/database.txt
      echo ""
-     echo ""
-     echo -e "$Cyan Akses zabbix >> http://$(hostname -I)/zabbix $Color_0ff"
+     ambilip="$(hostname -I)"
+     ipaddr="$(echo $ambilip| cut -d' ' -f 1)"
+     echo -e "$Cyan Akses zabbix >> http://$ipaddr/zabbix $Color_0ff"
      echo -e "$Red --------------------------------------------------------- $Color_0ff"
      echo -e "$cyan default User     : Admin $Color_0ff"
      echo -e "$cyan default Password : zabbix $Color_0ff"
      echo -e "$Red --------------------------------------------------------- $Color_0ff"
      echo ""
+     echo -e "$Cyan Download Template Zabbix $Color_0ff"
+     echo -e "$Red --------------------------------------------------------- $Color_0ff"
+     echo -e "$Cyan download template Mikrotik Queue >> http://$ipaddr/template-zabbix/mikrotik-queue.xml $Color_0ff"
+     echo -e "$Cyan download template Mikrotik SNMP >> http://$ipaddr/template-zabbix/mikrotik-snmp.xml $Color_0ff"
+     echo -e "$Cyan download template ICMP >> http://$ipaddr/template-zabbix/icmp-ping.xml $Color_0ff"     
+
      systemctl restart httpd
      systemctl restart mariadb
      systemctl restart zabbix-server
@@ -832,7 +851,6 @@ function check_service ()
      echo ""
      echo -e "$Red ---------------------------------------------------- $Color_0ff"
      echo -e "$Cyan SUKSES INSTALL ZABBIX !!!!!!                      $Color_0ff"
-     echo -e "$Red  ~author:UH~                                       $Color_0ff"
      echo -e "$Red ---------------------------------------------------- $Color_0ff"
      Keluar
 }
@@ -846,7 +864,6 @@ if [[  $(cat /etc/centos-release | grep "CentOS") ]]
                clear
                echo "Mohon gunakan level ROOT"
                Keluar
-               exit
           else
                loading
                clear
