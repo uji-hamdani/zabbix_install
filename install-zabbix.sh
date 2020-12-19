@@ -593,7 +593,7 @@ case $case_php in
      systemctl restart httpd
      systemctl restart mariadb
      echo ""
-     if [[ "$(php) -v" ]]
+     if [[ $(php -v) ]]
           then      
                versi=$(php -v)
                versiarr=($versi)
