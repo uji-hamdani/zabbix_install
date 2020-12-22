@@ -21,6 +21,7 @@ Zabbix supports both polling and trapping. All Zabbix reports and statistics, as
 ```cli
 yum install git
 git clone https://github.com/uji-hamdani/zabbix_install.git
+cd zabbix_install
 ./install-zabbix.sh
 ```
 
